@@ -1,0 +1,21 @@
+import pandas as pd
+
+df = pd.read_csv("data/Food_Inspections.csv")
+df.drop("Inspection ID", axis=1, inplace=True)
+df.drop("DBA Name", axis=1, inplace=True)
+df.drop("AKA Name", axis=1, inplace=True)
+df.drop("License #", axis=1, inplace=True)
+df.drop("Facility Type", axis=1, inplace=True)
+df.drop("Risk", axis=1, inplace=True)
+df.drop("Address", axis=1, inplace=True)
+df.drop("City", axis=1, inplace=True)
+df.drop("State", axis=1, inplace=True)
+df.drop("Zip", axis=1, inplace=True)
+df.drop("Inspection Date", axis=1, inplace=True)
+df.drop("Inspection Type", axis=1, inplace=True)
+df.drop("Results", axis=1, inplace=True)
+df.drop("Violations", axis=1, inplace=True)
+df.drop("Location", axis=1, inplace=True)
+df.dropna().head(50000).to_csv("data/food_inspection.csv", sep=',', encoding='utf-8', index=False, header=False)
+# df.dropna().tail(100).to_csv("data/food_inspection_test.csv", sep=',', encoding='utf-8', index=False, header=False)
+

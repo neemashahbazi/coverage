@@ -1,0 +1,23 @@
+import pandas as pd
+
+df = pd.read_csv("data/35259228_T_ONTIME1.csv")
+df.drop("ORIGIN_AIRPORT_ID", axis=1, inplace=True)
+df.drop("DEST_AIRPORT_ID", axis=1, inplace=True)
+
+# df.drop("DEP_DELAY", axis=1, inplace=True)
+df.drop("Delay_Group_Normal", axis=1, inplace=True)
+# df.drop("TAXI_OUT", axis=1, inplace=True)
+# df.drop("TAXI_IN", axis=1, inplace=True)
+df.drop("ARR_Dealy_group", axis=1, inplace=True)
+df.drop("ARR_DELAY_NEW", axis=1, inplace=True)
+df.drop("CRS_ELAPSED_TIME", axis=1, inplace=True)
+df.drop("ACTUAL_ELAPSED_TIME", axis=1, inplace=True)
+df.drop("AIR_TIME_GROUP", axis=1, inplace=True)
+# df.drop("AIR_TIME", axis=1, inplace=True)
+# df.drop("DISTANCE", axis=1, inplace=True)
+df.drop("DISTANCE_GROUP", axis=1, inplace=True)
+df.drop("TAXI_IN_GROUP", axis=1, inplace=True)
+df.drop("TAXI_OUT_GROUP", axis=1, inplace=True)
+df.drop("RAND#", axis=1, inplace=True)
+df.dropna().head(100000).to_csv("data/dot.csv", sep=',', encoding='utf-8', index=False, header=False)
+# df.dropna().tail(100).to_csv("data/food_inspection_test.csv", sep=',', encoding='utf-8', index=False, header=False)
