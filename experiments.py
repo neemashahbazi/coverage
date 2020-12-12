@@ -77,7 +77,7 @@ def heatmap(data, row_labels, col_labels, ax=None,
     return im, cbar
 
 
-def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
+def annotate_heatmap(im, data=None, num_list=None, valfmt="{x:.2f}",
                      textcolors=["black", "white"],
                      threshold=None, **textkw):
     if not isinstance(data, (list, np.ndarray)):
@@ -105,7 +105,7 @@ def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
     for i in range(data.shape[0]):
         for j in range(data.shape[1]):
             kw.update(color=textcolors[int(im.norm(data[i, j]) < threshold)])
-            text = im.axes.text(j, i, valfmt(data[i, j], None), **kw)
+            text = im.axes.text(j, i, valfmt(data[i, j], None)+"\n("+num_list[i, j]+")", **kw)
             texts.append(text)
     return texts
 
@@ -215,6 +215,7 @@ for pivot_x in np.arange(0.0, 1.0, step):
 
 grid_entropy = {}
 entropy_list = []
+num_list = []
 min_grid_features = []
 min_grid_observations = []
 max_grid_features = []
@@ -223,18 +224,24 @@ min_flag = True
 max_flag = True
 for key in grid_correct:
     entropy1 = 0
+    num1 = 0
     if len(grid_incorrect[key]) != 0:
         p = len(grid_correct[key]) / (len(grid_correct[key]) + len(grid_incorrect[key]))
+        num1 = len(grid_correct[key])
         if p != 0:
             entropy1 = -p * np.log2(p)
     entropy2 = 0
+    num2 = 0
     if len(grid_correct[key]) != 0:
         p = len(grid_incorrect[key]) / (len(grid_correct[key]) + len(grid_incorrect[key]))
+        num2 = len(grid_incorrect[key])
         if p != 0:
             entropy2 = -p * np.log2(p)
     entropy = entropy1 + entropy2
+    num = num1 + num2
     grid_entropy.update({key: entropy})
     entropy_list.append(entropy)
+    num_list.append(str(num))
 
 rho = 0.1
 k = 100
@@ -307,11 +314,14 @@ for pivot_y in np.arange(0.0, 1.0, step):
 B = np.reshape(entropy_list, (len(y_axis), len(x_axis)))
 entropy_ = B.T
 
+C = np.reshape(num_list, (len(y_axis), len(x_axis)))
+num_ = C.T
+
 fig, ax = plt.subplots(ncols=2, nrows=1, figsize=(18, 5))
 # ax[0].plot(x_plot_correct, y_plot_correct, 'bo', markersize=2)
 # ax[0].plot(x_plot_incorrect, y_plot_incorrect, 'ro', markersize=2)
 im, cbar = heatmap(entropy_, y_axis, x_axis, ax=ax[1], cbarlabel="Entropy", cmap="viridis")
-texts = annotate_heatmap(im, valfmt="{x:.2f}")
+texts = annotate_heatmap(im, num_list=num_, valfmt="{x:.2f}")
 fig.tight_layout()
 plt.xlabel('Latitude')
 plt.ylabel('Longitude')
